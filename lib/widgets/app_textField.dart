@@ -5,12 +5,13 @@ class AppTextfield extends StatefulWidget {
   String title;
   String hint;
   bool isPass;
-
+  String? errorText;
   AppTextfield({
     super.key,
     required this.title,
     required this.hint,
     this.isPass = false,
+    this.errorText,
     required this.controller,
   });
 
@@ -33,6 +34,7 @@ class _AppTextfieldState extends State<AppTextfield> {
             obscureText: widget.isPass ? is_ob : false,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
+              errorText: widget.errorText,
               hint: Text(widget.hint, style: TextStyle(color: Colors.grey)),
               suffixIcon: widget.isPass
                   ? IconButton(

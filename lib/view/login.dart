@@ -4,13 +4,61 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopflutter/view/main_page.dart';
 import 'package:shopflutter/view/signup.dart';
-import 'package:shopflutter/view/navpages/product_page.dart';
 import 'package:shopflutter/widgets/app_buttoms.dart';
 import 'package:shopflutter/widgets/app_textField.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
-  Future<bool> PutData(String tdn, String mk, BuildContext context) async {
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String? errorUsername;
+  String? errorPassword;
+
+  Future<void> handleLogin() async {
+    // Reset lỗi trước khi kiểm tra
+    setState(() {
+      errorUsername = null;
+      errorPassword = null;
+    });
+
+    bool isValid = true;
+    if (txttendangnhap.text.isEmpty) {
+      setState(() => errorUsername = "Tên đăng nhập không được để trống");
+      isValid = false;
+    }
+    if (txtmatkhau.text.isEmpty) {
+      setState(() => errorPassword = "Mật khẩu không được để trống");
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    bool isLogin = await putData(
+      txttendangnhap.text.toString(),
+      txtmatkhau.text.toString(),
+    );
+
+    if (isLogin) {
+      //Khi một StatefulWidget vừa được tạo ra và hiển thị lên màn hình, biến mounted sẽ được hệ thống đặt giá trị mặc định là true.
+      //Biến mounted là một thuộc tính có sẵn trong lớp State của các StatefulWidget
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const MainPage()),
+        (route) => false,
+      );
+    } else {
+      setState(() {
+        errorUsername = ""; // Khoảng trắng để highlight đỏ ô nhập
+        errorPassword = "Thông tin đăng nhập không chính xác";
+      });
+    }
+  }
+
+  Future<bool> putData(String tdn, String mk) async {
     var url = Uri.parse("http://127.0.0.1:8000/api/user/login");
     var respond = await http.post(
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
@@ -33,6 +81,7 @@ class LoginPage extends StatelessWidget {
   }
 
   var txttendangnhap = TextEditingController();
+
   var txtmatkhau = TextEditingController();
 
   @override
@@ -40,6 +89,7 @@ class LoginPage extends StatelessWidget {
     txttendangnhap.text = "duongnguyen";
     txtmatkhau.text = "123456";
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -54,19 +104,21 @@ class LoginPage extends StatelessWidget {
           AppTextfield(
             title: "Tên đăng nhập",
             hint: "nguyenduong43",
+            errorText: errorUsername,
             controller: txttendangnhap,
           ),
           AppTextfield(
             title: "Mật khẩu",
             hint: "Mật khẩu",
             isPass: true,
+            errorText: errorPassword,
             controller: txtmatkhau,
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text(
+              child: const Text(
                 "Quên mật khẩu",
                 style: TextStyle(color: Colors.pink),
               ),
@@ -75,17 +127,7 @@ class LoginPage extends StatelessWidget {
 
           InkWell(
             onTap: () async {
-              bool isLogin = await PutData(
-                txttendangnhap.text.toString(),
-                txtmatkhau.text.toString(),
-                context,
-              );
-              if (isLogin) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => MainPage()),
-                  (route) => false,
-                );
-              }
+              handleLogin();
             },
             child: AppButtoms(
               title: "Đăng nhập",
@@ -109,7 +151,7 @@ class LoginPage extends StatelessWidget {
               TextSpan(
                 text: "Bạn không có tài khoản ",
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: "Đăng ký",
                     style: TextStyle(
                       fontSize: 15,
@@ -120,6 +162,24 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void notificationLogin(BuildContext context, String content) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Thông báo"),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("OK"),
           ),
         ],
       ),

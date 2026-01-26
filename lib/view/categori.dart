@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shopflutter/model/product_model.dart';
 import 'package:shopflutter/view/navpages/product_page.dart'; // Đảm bảo đường dẫn này đúng với project của bạn
 
@@ -230,6 +233,7 @@ class _CategoriState extends State<Categori> {
                       const SnackBar(content: Text("Giỏ hàng trống!")),
                     );
                   } else {
+                    postOrder(widget.ds, ProductPage.token.toString());
                     print("Đặt hàng thành công! Tổng: ${_tinhTongTien()}");
                   }
                 },
@@ -273,5 +277,38 @@ class _CategoriState extends State<Categori> {
         onPressed: onPress,
       ),
     );
+  }
+}
+
+Future<bool> postOrder(List<Productmodel> ds, String token) async {
+  var url = Uri.parse("http://127.0.0.1:8000/api/orders");
+
+  try {
+    var body = {
+      "user_id": 0,
+      "items": ds
+          .map((item) => {'product_id': item.id, 'qty': item.quantity})
+          .toList(),
+    };
+
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      print("Lỗi server: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("Lỗi kết nối: $e");
+    return false;
   }
 }

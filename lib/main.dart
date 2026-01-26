@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopflutter/view/login.dart';
+import 'package:shopflutter/view/main_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,11 +11,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      //  home: homePage(),
-      home: LoginPage(),
-
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false);
   }
 }

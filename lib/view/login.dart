@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopflutter/view/main_page.dart';
 import 'package:shopflutter/view/signup.dart';
-import 'package:shopflutter/view/product.dart';
+import 'package:shopflutter/view/navpages/product_page.dart';
 import 'package:shopflutter/widgets/app_buttoms.dart';
 import 'package:shopflutter/widgets/app_textField.dart';
 
@@ -31,10 +32,13 @@ class LoginPage extends StatelessWidget {
     return false;
   }
 
-  final txttendangnhap = TextEditingController();
-  final txtmatkhau = TextEditingController();
+  var txttendangnhap = TextEditingController();
+  var txtmatkhau = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    txttendangnhap.text = "duongnguyen";
+    txtmatkhau.text = "123456";
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -77,9 +81,10 @@ class LoginPage extends StatelessWidget {
                 context,
               );
               if (isLogin) {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (context) => Product()));
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => MainPage()),
+                  (route) => false,
+                );
               }
             },
             child: AppButtoms(

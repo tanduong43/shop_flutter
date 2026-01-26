@@ -4,12 +4,14 @@ class Productmodel {
   double price;
   String image;
   String short_description;
+  int quantity;
   Productmodel({
     required this.id,
     required this.name,
     required this.price,
     required this.image,
     required this.short_description,
+    this.quantity = 1,
   });
   factory Productmodel.fromJson(Map<String, dynamic> json) {
     return Productmodel(

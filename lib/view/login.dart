@@ -90,99 +90,156 @@ class _LoginPageState extends State<LoginPage> {
     txtmatkhau.text = "123456";
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            "Đăng nhập",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Chào mừng bạn trờ lại",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  "Đăng nhập để tiếp tục mua sắm",
+                  style: TextStyle(color: Colors.grey),
+                ),
+                SizedBox(height: 30),
+                AppTextfield(
+                  title: "Tên đăng nhập",
+                  hint: "nguyenduong43",
+                  errorText: errorUsername,
+                  controller: txttendangnhap,
+                ),
+                AppTextfield(
+                  title: "Mật khẩu",
+                  hint: "Mật khẩu",
+                  isPass: true,
+                  errorText: errorPassword,
+                  controller: txtmatkhau,
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: const Text(
+                      "Quên mật khẩu",
+                      style: TextStyle(color: Colors.pink),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                InkWell(
+                  onTap: () async {
+                    handleLogin();
+                  },
+                  child: AppButtoms(
+                    title: "Đăng nhập",
+                    color: Colors.blue,
+                    width: double.infinity,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.grey.shade300)),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("OR CONTINUE WITH"),
+                    ),
+                    Expanded(child: Divider(color: Colors.grey.shade300)),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: socialButton(
+                        icon: Icons.g_mobiledata,
+                        text: "Google",
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: socialButton(icon: Icons.apple, text: "Apple"),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 30),
+
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => SigupPage()),
+                    );
+                  },
+                  child: Center(
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Bạn không có tài khoản ",
+                        children: [
+                          const TextSpan(
+                            text: "Đăng ký",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.pink,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AppTextfield(
-            title: "Tên đăng nhập",
-            hint: "nguyenduong43",
-            errorText: errorUsername,
-            controller: txttendangnhap,
-          ),
-          AppTextfield(
-            title: "Mật khẩu",
-            hint: "Mật khẩu",
-            isPass: true,
-            errorText: errorPassword,
-            controller: txtmatkhau,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: const Text(
-                "Quên mật khẩu",
-                style: TextStyle(color: Colors.pink),
-              ),
-            ),
-          ),
-
-          InkWell(
-            onTap: () async {
-              handleLogin();
-            },
-            child: AppButtoms(
-              title: "Đăng nhập",
-              color: Colors.blue,
-              height: 500,
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "--------------OR CONTINUE WITH--------------",
-            style: TextStyle(color: Colors.grey),
-          ),
-          SizedBox(height: 20),
-          InkWell(
-            onTap: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => SigupPage()));
-            },
-            child: Text.rich(
-              TextSpan(
-                text: "Bạn không có tài khoản ",
-                children: [
-                  const TextSpan(
-                    text: "Đăng ký",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
-  void notificationLogin(BuildContext context, String content) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Thông báo"),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("OK"),
-          ),
-        ],
+  Widget socialButton({required IconData icon, required String text}) {
+    return Container(
+      height: 55,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Icon(icon), const SizedBox(width: 8), Text(text)],
       ),
     );
   }
+}
+
+void notificationLogin(BuildContext context, String content) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Thông báo"),
+      content: Text(content),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("OK"),
+        ),
+      ],
+    ),
+  );
 }

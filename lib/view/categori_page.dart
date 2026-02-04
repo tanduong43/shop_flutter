@@ -3,19 +3,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopflutter/model/product_model.dart';
+import 'package:shopflutter/view/chat_page.dart';
 import 'package:shopflutter/view/navpages/product_page.dart'; // Đảm bảo đường dẫn này đúng với project của bạn
 
-class Categori extends StatefulWidget {
+class CategoriPage extends StatefulWidget {
   final List<Productmodel> ds;
   final String token;
 
-  const Categori({super.key, required this.ds, required this.token});
+  const CategoriPage({super.key, required this.ds, required this.token});
 
   @override
-  State<Categori> createState() => _CategoriState();
+  State<CategoriPage> createState() => _CategoriState();
 }
 
-class _CategoriState extends State<Categori> {
+class _CategoriState extends State<CategoriPage> {
   double _tinhTongTien() {
     double tong = 0;
     for (var item in widget.ds) {
@@ -29,28 +30,33 @@ class _CategoriState extends State<Categori> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Center(
-          child: Text(
-            "Giỏ hàng",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+        title: Text(
+          "Giỏ hàng (${ProductPage.countItem})",
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         actions: [
-          // Thêm một icon rỗng để title căn giữa chuẩn hơn
-          SizedBox(width: 48),
+          IconButton(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => ChatPage()));
+            },
+            icon: Icon(Icons.message),
+          ),
         ],
       ),
 
@@ -101,7 +107,7 @@ class _CategoriState extends State<Categori> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          item.image,
+                          item.image ?? "",
                           width: 80,
                           height: 80,
                           fit: BoxFit.cover,
@@ -120,7 +126,7 @@ class _CategoriState extends State<Categori> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.name,
+                              item.name ?? "",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,

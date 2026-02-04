@@ -17,21 +17,39 @@ class SigupPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios),
         ),
-        title: Center(
-          child: Text(
-            "Đăng ký",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
+        title: Text(
+          "Đăng ký",
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Tạo tài khoản",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Kết nối với trung tâm thương mại và bắt đầu mua sắm ngay thôi",
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
           AppTextfield(
             title: "Tên đăng nhập",
             hint: "nguyenduong43",

@@ -5,6 +5,8 @@ class AppButtoms extends StatelessWidget {
   double height;
   double width;
   Color color;
+  Color textColor;
+  Color boderColor;
 
   AppButtoms({
     super.key,
@@ -12,20 +14,23 @@ class AppButtoms extends StatelessWidget {
     this.height = 50,
     this.width = 300,
     this.color = Colors.green,
+    this.textColor = Colors.white,
+    this.boderColor = Colors.white,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20),
-      height: 50,
-      width: 300,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: boderColor),
         color: color,
       ),
       child: Center(
-        child: Text(title, style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(title, style: TextStyle(color: textColor, fontSize: 20)),
       ),
     );
   }
